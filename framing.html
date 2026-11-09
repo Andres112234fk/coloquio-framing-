@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Framing en Decisiones Económicas de Riesgo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Inter,sans-serif}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;background:#0A0A0A}
+.s{position:absolute;left:0;top:0;width:1920px;height:1080px;box-sizing:border-box;opacity:0;visibility:hidden;transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1),visibility 0s .7s}
+.s.on{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+.s.pf{opacity:0;transform:none}.s.pr{transform:translateX(100%);opacity:1}.s.pl{transform:translateX(-100%);opacity:1}
+.s.ol{transform:translateX(-22%);opacity:0}.s.or{transform:translateX(22%);opacity:0}
+.s.refs.on{z-index:9;transition:none}
+.s p,.s h2,.s h3{margin:0}
+.b{opacity:0;transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.2,1)}
+.b[data-e=rise]{transform:translateY(40px)}.b[data-e=drop]{transform:translateY(-50px)}.b[data-e=pop]{transform:scale(.85)}
+.b[data-e=scale]{transform:scale(.4)}.b[data-e=right]{transform:translateX(-40px)}.b[data-e=left]{transform:translateX(40px)}
+.b.in{opacity:1;transform:none}
+#ui{position:fixed;right:18px;bottom:18px;z-index:20;display:flex;gap:10px;transition:opacity .4s}
+#ui button{background:#1a1a1a;color:#F5F5F5;border:1px solid #333;border-radius:10px;padding:10px 14px;font:500 15px Inter,sans-serif;cursor:pointer}
+#timer{position:fixed;top:12px;right:16px;z-index:25;display:none;font:500 17px Montserrat,sans-serif;color:rgba(245,245,245,.26);letter-spacing:2px;font-variant-numeric:tabular-nums;pointer-events:none;transition:color .6s ease;text-shadow:0 0 6px rgba(0,0,0,.6)}
+#timer.warn{color:rgba(245,158,11,.5)}#timer.over{color:rgba(230,43,30,.75)}
+body.idle #ui{opacity:0}body.idle{cursor:none}
+#start{position:fixed;inset:0;z-index:30;background:#0A0A0A;color:#F5F5F5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;text-align:center;padding:24px}
+#start .bar{width:96px;height:8px;background:#E62B1E}
+#start h1{font:700 clamp(26px,4vw,52px) Montserrat,sans-serif;margin:0;max-width:900px;line-height:1.15}
+#start p{color:#A3A3A3;margin:0;font-size:16px}
+#start button{font:600 20px Montserrat,sans-serif;background:#E62B1E;color:#fff;border:0;border-radius:12px;padding:16px 32px;cursor:pointer}
+#start a{color:#A3A3A3;font-size:15px;cursor:pointer;text-decoration:underline}
+</style></head><body>
+<div id="stage">
+<div class="s" id="dilema" data-t="fade" style="background:#0A0A0A;color:#F5F5F5;font-family:Inter, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column">
+<p data-build-in="fade 1 auto" style="position:absolute;left:128px;top:112px;width:1664px;font-size:64px;color:#F5F5F5;font-weight:700;font-family:Montserrat, sans-serif;line-height:1.1;text-align:center;">Tienes $300.000 COP en tu cuenta</p>
+<div data-build-in="fade 1 auto" style="position:absolute;left:959px;top:260px;width:2px;height:640px;background:#333333"></div>
+<p data-build-in="rise 2" style="position:absolute;left:128px;top:280px;width:772px;font-size:36px;color:#10B981;font-weight:700;font-family:Montserrat, sans-serif;line-height:1.1;">MARCO A</p>
+<p data-build-in="pop 2" style="position:absolute;left:128px;top:360px;width:772px;font-size:120px;color:#10B981;font-weight:800;font-family:Montserrat, sans-serif;line-height:1.1;">+$100.000</p>
+<p data-build-in="rise 2" style="position:absolute;left:128px;top:500px;width:772px;font-size:36px;color:#A3A3A3;font-weight:400;">fijos</p>
+<p data-build-in="rise 2" style="position:absolute;left:128px;top:700px;width:772px;font-size:30px;color:#A3A3A3;font-weight:400;">o la bolsa: 1/3 de conservar todo</p>
+<div data-build-in="pop 2" style="position:absolute;left:128px;top:780px;width:56px;height:56px;background:#F5F5F5;border-radius:50%"></div>
+<div data-build-in="pop 2" style="position:absolute;left:204px;top:780px;width:56px;height:56px;background:#3A3A3A;border-radius:50%"></div>
+<div data-build-in="pop 2" style="position:absolute;left:280px;top:780px;width:56px;height:56px;background:#3A3A3A;border-radius:50%"></div>
+<p data-build-in="rise 3" style="position:absolute;left:1020px;top:280px;width:772px;font-size:36px;color:#E62B1E;font-weight:700;font-family:Montserrat, sans-serif;line-height:1.1;">MARCO B</p>
+<p data-build-in="pop 3" style="position:absolute;left:1020px;top:360px;width:772px;font-size:120px;color:#E62B1E;font-weight:800;font-family:Montserrat, sans-serif;line-height:1.1;">−$200.000</p>
+<p data-build-in="rise 3" style="position:absolute;left:1020px;top:500px;width:772px;font-size:36px;color:#A3A3A3;font-weight:400;">fijos</p>
+<p data-build-in="rise 3" style="position:absolute;left:1020px;top:700px;width:772px;font-size:30px;color:#A3A3A3;font-weight:400;">o la bolsa: 1/3 de no perder nada</p>
+<div data-build-in="pop 3" style="position:absolute;left:1020px;top:780px;width:56px;height:56px;background:#F5F5F5;border-radius:50%"></div>
+<div data-build-in="pop 3" style="position:absolute;left:1096px;top:780px;width:56px;height:56px;background:#3A3A3A;border-radius:50%"></div>
+<div data-build-in="pop 3" style="position:absolute;left:1172px;top:780px;width:56px;height:56px;background:#3A3A3A;border-radius:50%"></div>
+<p data-build-in="fade 1 auto" style="position:absolute;left:128px;top:992px;width:1664px;font-size:24px;color:#737373;font-weight:400;">Efecto Framing en Decisiones Económicas de Riesgo · 9° y 11° · Colegio Bilingüe Maximiliano Kolbe | Andrés Orozco</p>
+</div>
+<div class="s" id="radiografia" data-t="magic" style="background:#0A0A0A;color:#F5F5F5;font-family:Inter, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column">
+<div id="bar" data-build-in="fade 1 auto" style="position:absolute;left:128px;top:112px;width:96px;height:8px;background:#E62B1E"></div>
+<h2 id="title" style="position:absolute;left:128px;top:148px;width:1664px;font-size:64px;color:#F5F5F5;font-weight:700;font-family:Montserrat, sans-serif;line-height:1.1;">Tres cifras, un problema</h2>
+<div data-build-in="rise 2" style="position:absolute;left:128px;top:300px;width:632px;height:2px;background:#333333"></div>
+<p data-build-in="rise 2" style="position:absolute;left:128px;top:332px;width:632px;font-size:26px;color:#E62B1E;font-weight:600;letter-spacing:2px;">FENÓMENO GLOBAL</p>
+<p data-build-in="pop 2" style="position:absolute;left:128px;top:380px;width:632px;font-size:88px;color:#F5F5F5;font-weight:800;font-family:Montserrat, sans-serif;line-height:1.1;">72% → 22%</p>
+<p data-build-in="rise 2" style="position:absolute;left:128px;top:500px;width:632px;font-size:28px;color:#A3A3A3;font-weight:400;">Misma matemática, otra decisión (Tversky &amp; Kahneman, 1981)</p>
+<div data-build-in="rise 3" style="position:absolute;left:824px;top:300px;width:452px;height:2px;background:#333333"></div>
+<p data-build-in="rise 3" style="position:absolute;left:824px;top:332px;width:452px;font-size:26px;color:#E62B1E;font-weight:600;letter-spacing:2px;">REALIDAD EN COLOMBIA</p>
+<p data-build-in="pop 3" style="position:absolute;left:824px;top:380px;width:452px;font-size:88px;color:#F5F5F5;font-weight:800;font-family:Montserrat, sans-serif;line-height:1.1;">72%</p>
+<p data-build-in="rise 3" style="position:absolute;left:824px;top:500px;width:452px;font-size:28px;color:#A3A3A3;font-weight:400;">Adolescentes indecisos y con baja autoeficacia (Flórez-Madroñero &amp; Pantoja, 2024)</p>
+<div data-build-in="rise 4" style="position:absolute;left:1340px;top:300px;width:452px;height:2px;background:#333333"></div>
+<p data-build-in="rise 4" style="position:absolute;left:1340px;top:332px;width:452px;font-size:26px;color:#E62B1E;font-weight:600;letter-spacing:2px;">OPORTUNIDAD ACTUAL</p>
+<p data-build-in="pop 4" style="position:absolute;left:1340px;top:380px;width:452px;font-size:88px;color:#F5F5F5;font-weight:800;font-family:Montserrat, sans-serif;line-height:1.1;">+10.900</p>
+<p data-build-in="rise 4" style="position:absolute;left:1340px;top:500px;width:452px;font-size:28px;color:#A3A3A3;font-weight:400;">Estudiantes prueban que el sesgo se entrena (U. of Queensland, 2025)</p>
+<div data-build-in="fade 5" style="position:absolute;left:128px;top:760px;width:8px;height:110px;background:#E62B1E"></div>
+<p data-build-in="rise 5" style="position:absolute;left:168px;top:760px;width:1624px;font-size:38px;color:#F5F5F5;font-weight:600;font-family:Montserrat, sans-serif;line-height:1.1;line-height:1.25;">¿Cómo varían las decisiones económicas de riesgo en 9° y 11° (ganancia vs. pérdida) antes y después de hacer consciente el encuadre?</p>
+</div>
+<div class="s" id="motor" data-t="magic" style="background:#0A0A0A;color:#F5F5F5;font-family:Inter, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column">
+<div id="bar" data-build-in="fade 1 auto" style="position:absolute;left:128px;top:112px;width:96px;height:8px;background:#E62B1E"></div>
+<h2 id="title" style="position:absolute;left:128px;top:148px;width:1664px;font-size:64px;color:#F5F5F5;font-weight:700;font-family:Montserrat, sans-serif;line-height:1.1;">El motor oculto de la decisión</h2>
+<p data-build-in="fade 2" style="position:absolute;left:128px;top:360px;width:480px;font-size:26px;color:#6B6B6B;font-weight:400;letter-spacing:2px;">LO QUE CREÍAMOS</p>
+<p data-build-in="fade 2" style="position:absolute;left:128px;top:410px;width:480px;font-size:48px;color:#6B6B6B;font-weight:700;font-family:Montserrat, sans-serif;line-height:1.1;">Modelo racional clásico</p>
+<p data-build-in="fade 2" style="position:absolute;left:128px;top:550px;width:480px;font-size:72px;color:#6B6B6B;font-weight:800;font-family:Montserrat, sans-serif;line-height:1.1;">A = B</p>
+<p data-build-in="fade 2" style="position:absolute;left:128px;top:650px;width:480px;font-size:24px;color:#6B6B6B;font-weight:400;">Tabares Arango, 2020</p>
+<p data-build-in="rise 3" style="position:absolute;left:704px;top:300px;width:1088px;font-size:36px;color:#F5F5F5;font-weight:700;font-family:Montserrat, sans-serif;line-height:1.1;">Cómo decidimos en realidad</p>
+<div data-build-in="scale 3" style="position:absolute;left:704px;top:520px;width:200px;height:4px;background:#F5F5F5"></div>
+<p data-build-in="fade 3" style="position:absolute;left:936px;top:507px;width:856px;font-size:26px;color:#F5F5F5;font-weight:600;letter-spacing:1px;">PUNTO DE REFERENCIA ($0)</p>
+<div data-build-in="rise 4" style="position:absolute;left:704px;top:420px;width:200px;height:100px;background:#10B981"></div>
+<p data-build-in="fade 4" style="position:absolute;left:936px;top:450px;width:856px;font-size:30px;color:#10B981;font-weight:600;">+$50.000 → opción segura</p>
+<div data-build-in="drop 5" style="position:absolute;left:704px;top:524px;width:200px;height:200px;background:#E62B1E"></div>
+<p data-build-in="fade 5" style="position:absolute;left:936px;top:600px;width:856px;font-size:30px;color:#E62B1E;font-weight:600;">−$50.000 → asume riesgo</p>
+<p data-build-in="fade 6" style="position:absolute;left:128px;top:992px;width:1664px;font-size:24px;color:#737373;font-weight:400;">Perder duele más que lo que satisface ganar · Simon, 1955 · Chien et al., 1996</p>
+</div>
+<div class="s" id="metodologia" data-t="fade" style="background:#0A0A0A;color:#F5F5F5;font-family:Inter, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column">
+<div id="bar" data-build-in="fade 1 auto" style="position:absolute;left:128px;top:112px;width:96px;height:8px;background:#E62B1E"></div>
+<h2 id="title" style="position:absolute;left:128px;top:148px;width:1100px;font-size:64px;color:#F5F5F5;font-weight:700;font-family:Montserrat, sans-serif;line-height:1.1;">El laboratorio en el Kolbe</h2>
+<p data-build-in="fade 1 auto" style="position:absolute;left:1292px;top:170px;width:500px;font-size:28px;color:#A3A3A3;font-weight:400;text-align:right;">Cuasi-experimental mixto · n = 16</p>
+<div data-build-in="rise 2" style="position:absolute;left:128px;top:340px;width:480px;height:2px;background:#333333"></div>
+<p data-build-in="pop 2" style="position:absolute;left:128px;top:370px;width:480px;font-size:120px;color:#E62B1E;font-weight:800;font-family:Montserrat, sans-serif;line-height:1.1;">1</p>
+<p data-build-in="rise 2" style="position:absolute;left:128px;top:520px;width:480px;font-size:24px;color:#A3A3A3;font-weight:600;letter-spacing:2px;">FASE 1</p>
+<p data-build-in="rise 2" style="position:absolute;left:128px;top:570px;width:480px;font-size:42px;color:#F5F5F5;font-weight:700;font-family:Montserrat, sans-serif;line-height:1.1;">Pre-test</p>
+<p data-build-in="rise 2" style="position:absolute;left:128px;top:690px;width:480px;font-size:28px;color:#A3A3A3;font-weight:400;line-height:1.35;">3 escenarios equivalentes (formatos A/B) y guía de observación</p>
+<div data-build-in="rise 3" style="position:absolute;left:720px;top:340px;width:480px;height:2px;background:#333333"></div>
+<p data-build-in="pop 3" style="position:absolute;left:720px;top:370px;width:480px;font-size:120px;color:#E62B1E;font-weight:800;font-family:Montserrat, sans-serif;line-height:1.1;">2</p>
+<p data-build-in="rise 3" style="position:absolute;left:720px;top:520px;width:480px;font-size:24px;color:#A3A3A3;font-weight:600;letter-spacing:2px;">FASE 2 · 40–50 MIN</p>
+<p data-build-in="rise 3" style="position:absolute;left:720px;top:570px;width:480px;font-size:42px;color:#F5F5F5;font-weight:700;font-family:Montserrat, sans-serif;line-height:1.1;">Concientización</p>
+<p data-build-in="rise 3" style="position:absolute;left:720px;top:690px;width:480px;font-size:28px;color:#A3A3A3;font-weight:400;line-height:1.35;">Choque en vivo, revelación del encuadre y reformulación</p>
+<div data-build-in="rise 4" style="position:absolute;left:1312px;top:340px;width:480px;height:2px;background:#333333"></div>
+<p data-build-in="pop 4" style="position:absolute;left:1312px;top:370px;width:480px;font-size:120px;color:#E62B1E;font-weight:800;font-family:Montserrat, sans-serif;line-height:1.1;">3</p>
+<p data-build-in="rise 4" style="position:absolute;left:1312px;top:520px;width:480px;font-size:24px;color:#A3A3A3;font-weight:600;letter-spacing:2px;">FASE 3</p>
+<p data-build-in="rise 4" style="position:absolute;left:1312px;top:570px;width:480px;font-size:42px;color:#F5F5F5;font-weight:700;font-family:Montserrat, sans-serif;line-height:1.1;">Post-test y grupo focal</p>
+<p data-build-in="rise 4" style="position:absolute;left:1312px;top:690px;width:480px;font-size:28px;color:#A3A3A3;font-weight:400;line-height:1.35;">Índice de variación (%) y matriz de justificaciones</p>
+<div data-build-in="right 3" style="position:absolute;left:640px;top:400px;width:48px;height:48px;background:#525252;clip-path:polygon(0 30%,55% 30%,55% 0,100% 50%,55% 100%,55% 70%,0 70%)"></div>
+<div data-build-in="right 4" style="position:absolute;left:1232px;top:400px;width:48px;height:48px;background:#525252;clip-path:polygon(0 30%,55% 30%,55% 0,100% 50%,55% 100%,55% 70%,0 70%)"></div>
+<p data-build-in="fade 5" style="position:absolute;left:128px;top:880px;width:1664px;font-size:28px;color:#10B981;font-weight:600;">✓ Consentimiento informado · códigos anónimos · sin riesgo patrimonial ni académico</p>
+</div>
+<div class="s" id="ventana" data-t="fade" style="background:#0A0A0A;color:#F5F5F5;font-family:Montserrat, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column">
+<svg data-build-in="fade 1 auto" aria-label="Ventana con la misma montaña: a la izquierda cielo soleado y verde, a la derecha tormenta roja" style="position:absolute;left:530px;top:96px;width:860px;height:470px" width="860" height="470" viewBox="0 0 860 470" xmlns="http://www.w3.org/2000/svg">
+<defs><clipPath id="L"><rect x="30" y="30" width="400" height="410"/></clipPath><clipPath id="R"><rect x="430" y="30" width="400" height="410"/></clipPath></defs>
+<rect x="30" y="30" width="400" height="410" fill="#BFE9D6"/><rect x="430" y="30" width="400" height="410" fill="#5B1A22"/>
+<circle cx="150" cy="140" r="52" fill="#FACC15" clip-path="url(#L)"/>
+<path d="M630 70 l-40 80 h36 l-24 70 70-100 h-40 l30-50z" fill="#FDE68A" clip-path="url(#R)"/>
+<path d="M130 440 L430 160 L730 440z" fill="#0F6B4A" clip-path="url(#L)"/><path d="M130 440 L430 160 L730 440z" fill="#2B0B10" clip-path="url(#R)"/>
+<rect x="30" y="30" width="800" height="410" fill="none" stroke="#F5F5F5" stroke-width="12"/><rect x="424" y="30" width="12" height="410" fill="#F5F5F5"/><rect x="30" y="228" width="800" height="12" fill="#F5F5F5"/>
+</svg>
+<p data-build-in="rise 2" style="position:absolute;left:210px;top:620px;width:1500px;font-size:48px;color:#F5F5F5;font-weight:700;font-family:Montserrat, sans-serif;line-height:1.1;text-align:center;line-height:1.2;">“Quien no conoce el marco en el que le presentan el mundo, cree que está eligiendo cuando solo está reaccionando.”</p>
+<div data-build-in="scale 3" style="position:absolute;left:912px;top:860px;width:96px;height:8px;background:#E62B1E"></div>
+<p data-build-in="fade 1 auto" style="position:absolute;left:128px;top:992px;width:1664px;font-size:24px;color:#737373;font-weight:400;text-align:center;font-family:Inter, sans-serif;">Andrés Orozco | I Coloquio de Avances Investigativos</p>
+</div>
+<div class="s refs" id="referencias" data-t="fade" style="background:#0A0A0A;color:#F5F5F5;font-family:Inter, sans-serif;padding:112px 128px 128px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:28px"><div style="width:96px;height:8px;background:#E62B1E"></div><h2 style="font-family:Montserrat, sans-serif;font-size:64px;font-weight:700;line-height:1.1">Referencias</h2></div>
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;line-height:1.35;color:#F5F5F5">Chien, Y.-C., Lin, C., &amp; Worthley, J. (1996). Effect of framing on adolescents’ decision making. <i>Perceptual and Motor Skills, 83</i>(3), 811–819. https://doi.org/10.2466/pms.1996.83.3.811</p>
+<p style="font-size:24px;line-height:1.35;color:#F5F5F5">Flórez-Madroñero, A. C., &amp; Pantoja-Solarte, I. C. (2024). Patrones en la toma de decisiones en adolescentes del municipio de Pasto. <i>Revista Biumar, 8</i>(1), 8–17. https://doi.org/10.31948/rb.v8i1.3884</p>
+<p style="font-size:24px;line-height:1.35;color:#F5F5F5">Kahneman, D., &amp; Tversky, A. (1979). Prospect theory: An analysis of decision under risk. <i>Econometrica, 47</i>(2), 263–291. https://doi.org/10.2307/1914185</p>
+<p style="font-size:24px;line-height:1.35;color:#F5F5F5">Kühberger, A. (1998). The influence of framing on risky decisions: A meta-analysis. <i>Organizational Behavior and Human Decision Processes, 75</i>(1), 23–55. https://doi.org/10.1006/obhd.1998.2781</p>
+<p style="font-size:24px;line-height:1.35;color:#F5F5F5">Simon, H. A. (1955). A behavioral model of rational choice. <i>The Quarterly Journal of Economics, 69</i>(1), 99–118. https://doi.org/10.2307/1884852</p>
+<p style="font-size:24px;line-height:1.35;color:#F5F5F5">Swaryandini, G., Graham, J., Griffith, S., Grilo, V., Ruzzante, F., Zhang, X., Yeung, S. K., Mangiarulo, M., Basarkod, G., Ng, C., Parker, P., Tangen, J., Saeri, A., Grundy, E., Slattery, P., &amp; Noetel, M. (2025). Systematic review and meta-analysis of educational approaches to reduce cognitive biases among students. <i>Nature Human Behaviour, 9</i>(12), 2510–2538. https://doi.org/10.1038/s41562-025-02253-y</p>
+<p style="font-size:24px;line-height:1.35;color:#F5F5F5">Tversky, A., &amp; Kahneman, D. (1981). The framing of decisions and the psychology of choice. <i>Science, 211</i>(4481), 453–458. https://doi.org/10.1126/science.7455683</p>
+</div>
+</div>
+</div>
+<div id="ui"><button id="fs" title="Pantalla completa (F)">⛶ Pantalla completa</button></div>
+<div id="timer">7:00</div>
+<div id="start"><div class="bar"></div><h1>Framing en Decisiones Económicas de Riesgo</h1><p>Andrés Orozco · I Coloquio de Avances Investigativos</p><button id="go">Presentar en pantalla completa</button><a id="nofs">Empezar sin pantalla completa</a><p>Avanzar: clic, espacio o → · Retroceder: ← · Pantalla completa: F · Referencias: R · Reiniciar cronómetro: T · Ocultar/mostrar: H</p></div>
+<script>
+(function(){
+var T0=0,TOTAL=420,timerEl=document.getElementById('timer'),stage=document.getElementById('stage'),all=[].slice.call(stage.querySelectorAll('.s')),
+slides=all.filter(function(s){return !s.classList.contains('refs')}),refs=stage.querySelector('.refs'),
+i=0,step=0,started=false,data=[];
+function fit(){var k=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform='scale('+k+') translate(-50%,-50%)'}
+addEventListener('resize',fit);fit();
+slides.forEach(function(s){var auto=[],g={};
+[].forEach.call(s.querySelectorAll('[data-build-in]'),function(e){var p=e.getAttribute('data-build-in').split(/\s+/);
+e.classList.add('b');e.setAttribute('data-e',p[0]);var o=parseInt(p[1]||'1',10);
+if(p.indexOf('auto')>-1)auto.push(e);else{(g[o]=g[o]||[]).push(e)}});
+data.push({auto:auto,groups:Object.keys(g).map(Number).sort(function(a,b){return a-b}).map(function(k){return g[k]})})});
+function reveal(list,d){list.forEach(function(e,n){setTimeout(function(){e.classList.add('in')},d+n*80)})}
+function setBuilds(idx,full){var d=data[idx];[].forEach.call(slides[idx].querySelectorAll('.b'),function(e){e.classList.remove('in')});
+if(full){[].forEach.call(slides[idx].querySelectorAll('.b'),function(e){e.classList.add('in')});step=d.groups.length}
+else{step=0;reveal(d.auto,450)}}
+function go(n,back){if(n<0||n>=slides.length)return;var old=slides[i],nw=slides[n],t=(back?nw:old).getAttribute('data-t');
+var push=(t==='push'||t==='magic');
+nw.style.transition='none';nw.className='s '+(push?(back?'pl':'pr'):'pf');void nw.offsetWidth;nw.style.transition='';
+setBuilds(n,back);
+nw.className='s on';if(old!==nw)old.className='s '+(push?(back?'or':'ol'):'pf');i=n}
+function next(){if(!started)return;var d=data[i];if(step<d.groups.length){reveal(d.groups[step],0);step++}else go(i+1,false)}
+function prev(){if(!started)return;if(step>0){step--;data[i].groups[step].forEach(function(e){e.classList.remove('in')})}else go(i-1,true)}
+function tick(){var r=TOTAL-Math.floor((Date.now()-T0)/1000),a=Math.abs(r),m=Math.floor(a/60),s=a%60;
+timerEl.textContent='\u23F1\u2009'+(r<0?'+':'')+m+':'+(s<10?'0':'')+s;timerEl.className=r<0?'over':(r<=60?'warn':'')}
+function toggleRefs(){refs.classList.toggle('on')}
+function fs(){var d=document;if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{var e=d.documentElement;(e.requestFullscreen||e.webkitRequestFullscreen).call(e)}}
+function begin(full){if(full){try{fs()}catch(x){}}document.getElementById('start').style.display='none';started=true;T0=Date.now();timerEl.style.display='block';tick();setInterval(tick,250);
+slides.forEach(function(s,n){s.className='s'});slides[0].className='s on';setBuilds(0,false)}
+document.getElementById('go').onclick=function(e){e.stopPropagation();begin(true)};
+document.getElementById('nofs').onclick=function(e){e.stopPropagation();begin(false)};
+document.getElementById('fs').onclick=function(e){e.stopPropagation();fs()};
+addEventListener('keydown',function(e){var k=e.key;
+if(!started){if(k==='Enter'||k==='f'||k==='F'){begin(true)}return}
+if(refs.classList.contains('on')&&k!=='f'&&k!=='F'){toggleRefs();return}
+if(k==='ArrowRight'||k===' '||k==='PageDown'||k==='Enter'){e.preventDefault();next()}
+else if(k==='ArrowLeft'||k==='PageUp'||k==='Backspace'){e.preventDefault();prev()}
+else if(k==='f'||k==='F')fs();else if(k==='r'||k==='R')toggleRefs();else if(k==='t'||k==='T'){T0=Date.now();tick()}else if(k==='h'||k==='H')timerEl.style.display=timerEl.style.display==='none'?'block':'none';
+else if(k==='Home'){go(0,true)}else if(k==='End'){go(slides.length-1,false)}});
+document.addEventListener('click',function(e){if(started&&!e.target.closest('#ui'))next()});
+var sx=null;addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});
+addEventListener('touchend',function(e){if(sx===null)return;var dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50){e.preventDefault();dx<0?next():prev()}sx=null});
+var idle;function wake(){document.body.classList.remove('idle');clearTimeout(idle);idle=setTimeout(function(){if(started)document.body.classList.add('idle')},2200)}
+addEventListener('mousemove',wake);wake();
+})();
+</script></body></html>
